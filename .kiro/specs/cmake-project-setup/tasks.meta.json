@@ -1,0 +1,189 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Crear client/CMakeLists.txt con la configuración global del proyecto": [
+      {
+        "executionId": "bb86588d-8636-4227-be74-d941a07d015b",
+        "chatSessionId": "sess_3da1a6f4-619d-4ffb-9c97-77c660f0dfbf",
+        "timestamp": 1784653477764
+      },
+      {
+        "executionId": "bb86588d-8636-4227-be74-d941a07d015b",
+        "chatSessionId": "sess_3da1a6f4-619d-4ffb-9c97-77c660f0dfbf",
+        "timestamp": 1784653588738
+      }
+    ],
+    "1. Crear el CMakeLists.txt raíz y la integración de Raylib": [
+      {
+        "executionId": "bb86588d-8636-4227-be74-d941a07d015b",
+        "chatSessionId": "sess_3da1a6f4-619d-4ffb-9c97-77c660f0dfbf",
+        "timestamp": 1784653588786
+      }
+    ],
+    "2.1 Crear client/src/utils/CMakeLists.txt": [
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653683743
+      },
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653902819
+      }
+    ],
+    "2.2 Crear client/src/game/CMakeLists.txt": [
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653907558
+      },
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653980796
+      }
+    ],
+    "2.3 Crear client/src/net/CMakeLists.txt": [
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653908389
+      },
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653981604
+      }
+    ],
+    "2.4 Crear client/src/ui/CMakeLists.txt": [
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653909314
+      },
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653982741
+      }
+    ],
+    "2. Crear los CMakeLists.txt de módulos": [
+      {
+        "executionId": "b1fcb6b4-a881-4e2d-9bdd-29c7b17acba5",
+        "chatSessionId": "sess_b78f89f0-1aa3-42eb-8ed3-faddeb280ad5",
+        "timestamp": 1784653982830
+      }
+    ],
+    "3.1 Crear client/src/CMakeLists.txt con registro de módulos y target ejecutable": [
+      {
+        "executionId": "4dc3e157-104b-411b-8287-1c066378096c",
+        "chatSessionId": "sess_63922747-1252-4f1d-a095-86ee192210e5",
+        "timestamp": 1784654191768
+      },
+      {
+        "executionId": "4dc3e157-104b-411b-8287-1c066378096c",
+        "chatSessionId": "sess_63922747-1252-4f1d-a095-86ee192210e5",
+        "timestamp": 1784654258893
+      }
+    ],
+    "3.2 Configurar flags de Emscripten en el target principal": [
+      {
+        "executionId": "4dc3e157-104b-411b-8287-1c066378096c",
+        "chatSessionId": "sess_63922747-1252-4f1d-a095-86ee192210e5",
+        "timestamp": 1784654263810
+      },
+      {
+        "executionId": "4dc3e157-104b-411b-8287-1c066378096c",
+        "chatSessionId": "sess_63922747-1252-4f1d-a095-86ee192210e5",
+        "timestamp": 1784654316661
+      }
+    ],
+    "3.3 Configurar warnings y flags de optimización del target principal": [
+      {
+        "executionId": "4dc3e157-104b-411b-8287-1c066378096c",
+        "chatSessionId": "sess_63922747-1252-4f1d-a095-86ee192210e5",
+        "timestamp": 1784654264695
+      },
+      {
+        "executionId": "4dc3e157-104b-411b-8287-1c066378096c",
+        "chatSessionId": "sess_63922747-1252-4f1d-a095-86ee192210e5",
+        "timestamp": 1784654317515
+      }
+    ],
+    "3. Crear el CMakeLists.txt de src/ con el target principal": [
+      {
+        "executionId": "4dc3e157-104b-411b-8287-1c066378096c",
+        "chatSessionId": "sess_63922747-1252-4f1d-a095-86ee192210e5",
+        "timestamp": 1784654317586
+      }
+    ],
+    "4. Checkpoint - Verificar estructura CMake": [
+      {
+        "executionId": "651e3323-1a30-446e-a934-5cbf2915adb2",
+        "chatSessionId": "sess_1084ece5-c3b0-451c-b2bf-5eb21179629a",
+        "timestamp": 1784654344161
+      },
+      {
+        "executionId": "651e3323-1a30-446e-a934-5cbf2915adb2",
+        "chatSessionId": "sess_1084ece5-c3b0-451c-b2bf-5eb21179629a",
+        "timestamp": 1784654418401
+      }
+    ],
+    "5.1 Crear script de verificación de estructura CMake": [
+      {
+        "executionId": "549a5c17-529d-43b1-b634-cd98d9740b2e",
+        "chatSessionId": "sess_e6c33a8e-4b46-4021-b293-3eb2d273ab62",
+        "timestamp": 1784654561549
+      },
+      {
+        "executionId": "549a5c17-529d-43b1-b634-cd98d9740b2e",
+        "chatSessionId": "sess_e6c33a8e-4b46-4021-b293-3eb2d273ab62",
+        "timestamp": 1784654676339
+      }
+    ],
+    "5.2 Escribir tests de integración para el flujo de build": [
+      {
+        "executionId": "549a5c17-529d-43b1-b634-cd98d9740b2e",
+        "chatSessionId": "sess_e6c33a8e-4b46-4021-b293-3eb2d273ab62",
+        "timestamp": 1784654680802
+      },
+      {
+        "executionId": "549a5c17-529d-43b1-b634-cd98d9740b2e",
+        "chatSessionId": "sess_e6c33a8e-4b46-4021-b293-3eb2d273ab62",
+        "timestamp": 1784654872251
+      }
+    ],
+    "5.3 Escribir tests de condiciones de error": [
+      {
+        "executionId": "549a5c17-529d-43b1-b634-cd98d9740b2e",
+        "chatSessionId": "sess_e6c33a8e-4b46-4021-b293-3eb2d273ab62",
+        "timestamp": 1784654681547
+      },
+      {
+        "executionId": "549a5c17-529d-43b1-b634-cd98d9740b2e",
+        "chatSessionId": "sess_e6c33a8e-4b46-4021-b293-3eb2d273ab62",
+        "timestamp": 1784654872906
+      }
+    ],
+    "5. Verificación y pruebas de humo": [
+      {
+        "executionId": "549a5c17-529d-43b1-b634-cd98d9740b2e",
+        "chatSessionId": "sess_e6c33a8e-4b46-4021-b293-3eb2d273ab62",
+        "timestamp": 1784654872964
+      }
+    ],
+    "6. Checkpoint final - Validación completa": [
+      {
+        "executionId": "c08141c3-73fb-47f6-8cd2-ce13df4de9be",
+        "chatSessionId": "sess_faf4936e-ee0d-47e1-8aac-eb253ddbf5df",
+        "timestamp": 1784655840919
+      },
+      {
+        "executionId": "c08141c3-73fb-47f6-8cd2-ce13df4de9be",
+        "chatSessionId": "sess_faf4936e-ee0d-47e1-8aac-eb253ddbf5df",
+        "timestamp": 1784655893778
+      }
+    ]
+  }
+}
