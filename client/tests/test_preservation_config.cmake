@@ -1,15 +1,20 @@
 # ==============================================================================
-# Test de integración de build para ChronoClash (Emscripten/WebAssembly)
-# Uso: cmake -P client/tests/test_integration_build.cmake
-#      cmake -P client/tests/test_integration_build.cmake -DEMSDK_PATH=<ruta_al_sdk>
+# Test de preservación: Configuración CMake con Emscripten
+# Verifica que cmake -B completa con exit code 0 y que los linker flags
+# esperados están presentes en los archivos de build generados.
+#
+# Uso: cmake -P client/tests/test_preservation_config.cmake
+#      cmake -P client/tests/test_preservation_config.cmake -DEMSDK_PATH=<ruta>
 # Ejecutar desde la raíz del repositorio (hackathon-kiro-AI/)
+#
+# **Validates: Requirements 3.1, 3.2, 3.3**
 # ==============================================================================
 
 set(PASS_COUNT 0)
 set(FAIL_COUNT 0)
 set(SKIP_COUNT 0)
 set(CLIENT_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
-set(BUILD_DIR "${CLIENT_DIR}/build_test_integration")
+set(BUILD_DIR "${CLIENT_DIR}/build_preservation_test")
 
 # ------------------------------------------------------------------------------
 # Macros de utilidad
@@ -62,30 +67,21 @@ if("${TOOLCHAIN_FILE}" STREQUAL "")
     endif()
 endif()
 
-# Si no se encontró el toolchain, saltar todos los tests gracefully
+# Si no se encontró el toolchain, saltar todos los tests
 if("${TOOLCHAIN_FILE}" STREQUAL "")
     message(STATUS "")
     message(STATUS "===============================================")
     message(STATUS "  EMSCRIPTEN SDK NO ENCONTRADO")
     message(STATUS "===============================================")
     message(STATUS "")
-    message(STATUS "Los tests de integración requieren Emscripten SDK instalado.")
-    message(STATUS "Para ejecutar estos tests, usa una de las siguientes opciones:")
-    message(STATUS "")
-    message(STATUS "  1. Definir la variable EMSDK_PATH:")
-    message(STATUS "     cmake -P client/tests/test_integration_build.cmake -DEMSDK_PATH=/ruta/al/emsdk")
-    message(STATUS "")
-    message(STATUS "  2. Definir la variable de entorno EMSDK:")
-    message(STATUS "     set EMSDK=/ruta/al/emsdk  (Windows)")
-    message(STATUS "     export EMSDK=/ruta/al/emsdk  (Linux/macOS)")
-    message(STATUS "")
-    message(STATUS "  El archivo de toolchain esperado es:")
-    message(STATUS "  <EMSDK>/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake")
+    message(STATUS "Los tests de preservación requieren Emscripten SDK instalado.")
+    message(STATUS "Opciones:")
+    message(STATUS "  1. cmake -P client/tests/test_preservation_config.cmake -DEMSDK_PATH=/ruta/al/emsdk")
+    message(STATUS "  2. Definir variable de entorno EMSDK")
     message(STATUS "")
     message(STATUS "===============================================")
-    message(STATUS "  Tests de integración OMITIDOS (Emscripten no disponible)")
+    message(STATUS "  Tests de preservación OMITIDOS")
     message(STATUS "===============================================")
-    # Salir sin error - esto no es un fallo, es un skip
     return()
 endif()
 
@@ -96,7 +92,6 @@ message(STATUS "")
 message(STATUS "=== Preparando directorio de build temporal ===")
 message(STATUS "")
 
-# Limpiar build anterior si existe
 if(EXISTS "${BUILD_DIR}")
     message(STATUS "Limpiando build anterior en: ${BUILD_DIR}")
     file(REMOVE_RECURSE "${BUILD_DIR}")
@@ -106,14 +101,17 @@ file(MAKE_DIRECTORY "${BUILD_DIR}")
 message(STATUS "Directorio de build creado: ${BUILD_DIR}")
 
 # ==============================================================================
-# PASO 3: Test - Configuración CMake exitosa (cmake -B build)
+# PASO 3: Test - Configuración CMake exitosa (cmake -B) con exit code 0
+# Validates: Requirement 3.1
 # ==============================================================================
 message(STATUS "")
-message(STATUS "=== Test: Configuración CMake (cmake -B) ===")
+message(STATUS "=== Test: Configuración CMake completa con exit code 0 ===")
 message(STATUS "")
 
 execute_process(
-    COMMAND "${CMAKE_COMMAND}" -B "${BUILD_DIR}" "-DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE}" -G "MinGW Makefiles"
+    COMMAND "${CMAKE_COMMAND}" -S "${CLIENT_DIR}" -B "${BUILD_DIR}"
+            "-DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE}"
+            -G "MinGW Makefiles"
     WORKING_DIRECTORY "${CLIENT_DIR}"
     RESULT_VARIABLE CONFIG_RESULT
     OUTPUT_VARIABLE CONFIG_OUTPUT
@@ -122,80 +120,85 @@ execute_process(
 )
 
 if(CONFIG_RESULT EQUAL 0)
-    test_pass("cmake -B build -DCMAKE_TOOLCHAIN_FILE=... completó con código 0")
+    test_pass("cmake -B configuración completó con exit code 0 (Req 3.1)")
 else()
-    test_fail("cmake -B build falló con código ${CONFIG_RESULT}")
-    message(STATUS "  Salida de error:")
-    message(STATUS "  ${CONFIG_ERROR}")
-    # Si la configuración falla, no podemos continuar con el build
+    test_fail("cmake -B configuración falló con exit code ${CONFIG_RESULT} (Req 3.1)")
+    message(STATUS "  Error: ${CONFIG_ERROR}")
+    # No podemos verificar linker flags si la configuración falló
     message(STATUS "")
-    message(STATUS "La configuración falló. Saltando tests de compilación y artefactos.")
-    set(BUILD_FAILED TRUE)
+    message(STATUS "Configuración falló - no se pueden verificar linker flags.")
+
+    # Limpieza
+    if(EXISTS "${BUILD_DIR}")
+        file(REMOVE_RECURSE "${BUILD_DIR}")
+    endif()
+
+    message(STATUS "")
+    message(STATUS "===============================================")
+    message(STATUS "  RESUMEN DE TESTS DE PRESERVACIÓN")
+    message(STATUS "===============================================")
+    message(STATUS "  Tests pasados:  ${PASS_COUNT}")
+    message(STATUS "  Tests fallidos: ${FAIL_COUNT}")
+    message(STATUS "  Tests saltados: ${SKIP_COUNT}")
+    message(STATUS "===============================================")
+    message(FATAL_ERROR "Tests de preservación fallaron con ${FAIL_COUNT} error(es).")
 endif()
 
 # ==============================================================================
-# PASO 4: Test - Compilación exitosa (cmake --build build)
+# PASO 4: Test - Verificar linker flags en archivos de build generados
+# Validates: Requirement 3.3
 # ==============================================================================
-if(NOT BUILD_FAILED)
-    message(STATUS "")
-    message(STATUS "=== Test: Compilación (cmake --build) ===")
-    message(STATUS "")
+message(STATUS "")
+message(STATUS "=== Test: Linker flags presentes en build generado ===")
+message(STATUS "")
 
-    execute_process(
-        COMMAND "${CMAKE_COMMAND}" --build "${BUILD_DIR}"
-        WORKING_DIRECTORY "${CLIENT_DIR}"
-        RESULT_VARIABLE BUILD_RESULT
-        OUTPUT_VARIABLE BUILD_OUTPUT
-        ERROR_VARIABLE BUILD_ERROR
-        TIMEOUT 300
+set(LINK_FILE "${BUILD_DIR}/src/CMakeFiles/ChronoClash.dir/link.txt")
+
+if(NOT EXISTS "${LINK_FILE}")
+    test_fail("Archivo link.txt no encontrado en: ${LINK_FILE}")
+    message(STATUS "  No se pueden verificar linker flags sin link.txt")
+else()
+    file(READ "${LINK_FILE}" LINK_CONTENT)
+
+    # Verificar cada linker flag esperado
+    set(EXPECTED_FLAGS
+        "-sUSE_GLFW=3"
+        "-sASYNCIFY"
+        "-sALLOW_MEMORY_GROWTH=1"
+        "-lwebsocket.js"
     )
 
-    if(BUILD_RESULT EQUAL 0)
-        test_pass("cmake --build build completó con código 0")
-    else()
-        test_fail("cmake --build build falló con código ${BUILD_RESULT}")
-        message(STATUS "  Salida de error:")
-        message(STATUS "  ${BUILD_ERROR}")
-        set(BUILD_FAILED TRUE)
-    endif()
-endif()
-
-# ==============================================================================
-# PASO 5: Test - Verificar artefactos generados (tamaño > 0)
-# ==============================================================================
-message(STATUS "")
-message(STATUS "=== Test: Verificación de artefactos ===")
-message(STATUS "")
-
-# Los artefactos se generan en src/ porque el target está definido en add_subdirectory(src)
-set(ARTIFACT_DIR "${BUILD_DIR}/src")
-set(ARTIFACTS index.html index.js index.wasm index.data)
-
-if(BUILD_FAILED)
-    foreach(ARTIFACT ${ARTIFACTS})
-        test_skip("Artefacto ${ARTIFACT} - build no completó exitosamente")
-    endforeach()
-else()
-    foreach(ARTIFACT ${ARTIFACTS})
-        set(ARTIFACT_PATH "${ARTIFACT_DIR}/${ARTIFACT}")
-        if(EXISTS "${ARTIFACT_PATH}")
-            file(SIZE "${ARTIFACT_PATH}" ARTIFACT_SIZE)
-            # index.data puede ser 0 bytes si el directorio assets está vacío (solo .gitkeep)
-            if("${ARTIFACT}" STREQUAL "index.data")
-                test_pass("${ARTIFACT} existe con tamaño ${ARTIFACT_SIZE} bytes (assets dir vacío es válido)")
-            elseif(ARTIFACT_SIZE GREATER 0)
-                test_pass("${ARTIFACT} existe con tamaño ${ARTIFACT_SIZE} bytes (> 0)")
-            else()
-                test_fail("${ARTIFACT} existe pero tiene tamaño 0 bytes")
-            endif()
+    foreach(FLAG ${EXPECTED_FLAGS})
+        string(FIND "${LINK_CONTENT}" "${FLAG}" FLAG_POS)
+        if(FLAG_POS GREATER -1)
+            test_pass("Linker flag '${FLAG}' presente en build (Req 3.3)")
         else()
-            test_fail("${ARTIFACT} NO existe en ${ARTIFACT_DIR}/")
+            test_fail("Linker flag '${FLAG}' NO encontrado en link.txt (Req 3.3)")
+            message(STATUS "  Contenido de link.txt: ${LINK_CONTENT}")
         endif()
     endforeach()
 endif()
 
 # ==============================================================================
-# PASO 6: Limpieza del directorio de build temporal
+# PASO 5: Test - Sin warnings nuevos en la configuración
+# Validates: Requirement 3.2
+# ==============================================================================
+message(STATUS "")
+message(STATUS "=== Test: Sin errores críticos en la configuración ===")
+message(STATUS "")
+
+# Verificar que no hay errores de configuración (los warnings de CMake son aceptables)
+# El warning sobre CMAKE_BUILD_TYPE es preexistente y esperado
+string(FIND "${CONFIG_ERROR}" "CMake Error" ERROR_POS)
+if(ERROR_POS EQUAL -1)
+    test_pass("Sin errores CMake en la salida de configuración (Req 3.2)")
+else()
+    test_fail("Se encontraron errores CMake en la configuración (Req 3.2)")
+    message(STATUS "  ${CONFIG_ERROR}")
+endif()
+
+# ==============================================================================
+# PASO 6: Limpieza
 # ==============================================================================
 message(STATUS "")
 message(STATUS "=== Limpieza ===")
@@ -213,7 +216,7 @@ endif()
 # ==============================================================================
 message(STATUS "")
 message(STATUS "===============================================")
-message(STATUS "  RESUMEN DE TESTS DE INTEGRACIÓN")
+message(STATUS "  RESUMEN DE TESTS DE PRESERVACIÓN")
 message(STATUS "===============================================")
 message(STATUS "  Tests pasados:  ${PASS_COUNT}")
 message(STATUS "  Tests fallidos: ${FAIL_COUNT}")
@@ -222,11 +225,9 @@ message(STATUS "===============================================")
 message(STATUS "")
 
 if(FAIL_COUNT GREATER 0)
-    message(FATAL_ERROR "Los tests de integración fallaron con ${FAIL_COUNT} error(es).")
+    message(FATAL_ERROR "Tests de preservación fallaron con ${FAIL_COUNT} error(es).")
 endif()
 
 if(PASS_COUNT GREATER 0)
-    message(STATUS "Todos los tests de integración pasaron exitosamente.")
-elseif(SKIP_COUNT GREATER 0)
-    message(STATUS "Tests de integración saltados (build no disponible).")
+    message(STATUS "Todos los tests de preservación pasaron exitosamente.")
 endif()

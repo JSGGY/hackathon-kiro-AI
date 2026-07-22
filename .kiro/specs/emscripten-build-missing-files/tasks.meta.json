@@ -1,0 +1,145 @@
+{
+  "pbtResults": {
+    "1. Write bug condition exploration test": {
+      "status": "passed",
+      "failingExample": "em++: error: '--shell-file': file not found: './hackathon-kiro-AI/client/src/shell.html'\nmingw32-make.exe[2]: *** [src/index.html] Error 1\nmingw32-make.exe[1]: *** [src/CMakeFiles/ChronoClash.dir/all] Error 2\nmingw32-make.exe: *** [all] Error 2\n\nIntegration test summary:\n- Tests pasados: 1 (cmake -B configuration)\n- Tests fallidos: 1 (cmake --build failed with exit code 2)\n- Tests saltados: 4 (all artifact checks skipped)\n\nBug preconditions confirmed:\n- client/assets/ does NOT exist\n- client/src/shell.html does NOT exist\n\nThe build compiles all source files to 100% but fails at the final linking step because the Emscripten linker (em++) cannot find shell.html referenced by --shell-file flag. The --preload-file flag referencing client/assets/ would also fail but --shell-file error surfaces first.",
+      "lastRunTimestamp": 1784664414312
+    },
+    "2. Write preservation property tests (BEFORE implementing fix)": {
+      "status": "passed",
+      "lastRunTimestamp": 1784664608162
+    },
+    "3.3 Verify bug condition exploration test now passes": {
+      "status": "passed",
+      "lastRunTimestamp": 1784665078279
+    }
+  },
+  "executionHistory": {
+    "1. Write bug condition exploration test": [
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664038185
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664045869
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664428516
+      }
+    ],
+    "2. Write preservation property tests (BEFORE implementing fix)": [
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664038234
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664432092
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664620325
+      }
+    ],
+    "3.1 Create `client/assets/.gitkeep` to establish the assets directory": [
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664038282
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664628786
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664679216
+      }
+    ],
+    "3.2 Create `client/src/shell.html` Emscripten shell template": [
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664038328
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664683068
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664789910
+      }
+    ],
+    "3.3 Verify bug condition exploration test now passes": [
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664038371
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664793800
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784665091140
+      }
+    ],
+    "3.4 Verify preservation tests still pass": [
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664038423
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784665094901
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784665140567
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784664038511
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784665144825
+      },
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784665264667
+      }
+    ],
+    "3. Fix for missing files causing Emscripten build failure": [
+      {
+        "executionId": "216ad0ab-7360-47e6-b919-87272555e12c",
+        "chatSessionId": "sess_82c38136-fd95-4d0e-b9a1-4e4be6713a3f",
+        "timestamp": 1784665140612
+      }
+    ]
+  }
+}
