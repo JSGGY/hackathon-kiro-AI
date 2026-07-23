@@ -8,6 +8,7 @@ target_include_directories(ui PUBLIC
 )
 
 target_link_libraries(ui PUBLIC
+    raylib
     game
 )
 
