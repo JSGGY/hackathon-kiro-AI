@@ -23,7 +23,7 @@ This plan implements the 3D background scene for the ChronoClash main menu by bu
     - Assert getCamera3D() returns Camera3D with projection=CAMERA_PERSPECTIVE, up=(0,1,0), correct fovy, position at Euclidean distance ±0.01 from target
     - **Validates: Requirements 1.3, 1.4**
 
-  - [ ] 1.3 Write property test: Orbit position invariant
+  - [x] 1.3 Write property test: Orbit position invariant
     - **Property 2: Orbit position invariant**
     - Generate random init params and random sequence of valid dt values
     - After each update, assert sqrt((cam.x-target.x)² + (cam.z-target.z)²) == distance ±0.01 AND cam.y == target.y + height AND Camera3D.target == configured target

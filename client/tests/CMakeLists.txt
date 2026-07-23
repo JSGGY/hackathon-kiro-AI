@@ -20,3 +20,16 @@ target_include_directories(test_camera_property1 PRIVATE
 target_compile_features(test_camera_property1 PRIVATE cxx_std_17)
 
 add_test(NAME camera_property1_struct_validity COMMAND test_camera_property1)
+
+# Property Test 2: Orbit position invariant
+add_executable(test_camera_property2
+    game/test_camera_property2.cpp
+    ${CAMERA_SRC}
+)
+target_include_directories(test_camera_property2 PRIVATE
+    ${RAYLIB_STUB_DIR}    # stub raylib.h (must come FIRST to override real raylib)
+    ${CAMERA_INCLUDE}     # camera.hpp
+)
+target_compile_features(test_camera_property2 PRIVATE cxx_std_17)
+
+add_test(NAME camera_property2_orbit_position_invariant COMMAND test_camera_property2)
