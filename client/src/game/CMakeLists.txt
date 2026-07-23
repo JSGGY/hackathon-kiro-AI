@@ -13,6 +13,7 @@ target_include_directories(game PUBLIC
 
 target_link_libraries(game PUBLIC
     utils
+    raylib
 )
 
 # Warnings para el módulo
