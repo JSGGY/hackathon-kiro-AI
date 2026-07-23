@@ -1,78 +1,116 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <title>ChronoClash</title>
 
-    <meta name="title" content="ChronoClash">
-    <meta name="description" content="ChronoClash - A web-based game built with raylib and Emscripten">
-    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="ChronoClash" />
+    <meta
+      name="description"
+      content="ChronoClash - A web-based game built with raylib and Emscripten"
+    />
+    <meta name="viewport" content="width=device-width" />
 
     <style>
-      body { font-family: arial; margin: 0; padding: unset; }
-
-      #header {
+      html, body {
+        margin: 0;
+        padding: 0;
         width: 100%;
-        height: 80px;
-        background-color: #888888;
+        height: 100%;
+        overflow: hidden;
+        font-family: arial;
       }
 
-      .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
-      div.emscripten { text-align: center; }
-      div.emscripten_border { border: 1px solid black; }
+      div.emscripten_border {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border: none;
+        overflow: hidden;
+      }
 
       /* NOTE: Canvas *must not* have any border or padding, or mouse coords will be wrong */
       canvas.emscripten {
         border: 0px none;
         background: black;
         width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      #loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 20;
+        transition: opacity 0.5s ease;
+      }
+
+      #loading-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
       }
 
       .spinner {
-        height: 30px;
-        width: 30px;
-        margin: 0;
-        margin-top: 20px;
-        margin-left: 20px;
-        display: inline-block;
-        vertical-align: top;
-        -webkit-animation: rotation .8s linear infinite;
-        -moz-animation: rotation .8s linear infinite;
-        -o-animation: rotation .8s linear infinite;
+        height: 50px;
+        width: 50px;
+        display: block;
         animation: rotation 0.8s linear infinite;
-        border-left: 5px solid black;
-        border-right: 5px solid black;
-        border-bottom: 5px solid black;
+        border-left: 5px solid rgba(255,255,255,0.3);
+        border-right: 5px solid rgba(255,255,255,0.3);
+        border-bottom: 5px solid rgba(255,255,255,0.3);
         border-top: 5px solid red;
         border-radius: 100%;
-        background-color: rgb(245, 245, 245);
+        background-color: transparent;
       }
+
       @-webkit-keyframes rotation {
-        from {-webkit-transform: rotate(0deg);}
-        to {-webkit-transform: rotate(360deg);}
+        from {
+          -webkit-transform: rotate(0deg);
+        }
+        to {
+          -webkit-transform: rotate(360deg);
+        }
       }
       @-moz-keyframes rotation {
-        from {-moz-transform: rotate(0deg);}
-        to {-moz-transform: rotate(360deg);}
+        from {
+          -moz-transform: rotate(0deg);
+        }
+        to {
+          -moz-transform: rotate(360deg);
+        }
       }
       @-o-keyframes rotation {
-        from {-o-transform: rotate(0deg);}
-        to {-o-transform: rotate(360deg);}
+        from {
+          -o-transform: rotate(0deg);
+        }
+        to {
+          -o-transform: rotate(360deg);
+        }
       }
       @keyframes rotation {
-        from {transform: rotate(0deg);}
-        to {transform: rotate(360deg);}
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       #status {
-        display: inline-block;
-        vertical-align: top;
-        margin-top: 30px;
-        margin-left: 20px;
+        margin-top: 15px;
         font-weight: bold;
-        color: rgb(40, 40, 40);
+        color: white;
+        font-size: 14px;
       }
 
       #progress {
@@ -81,174 +119,287 @@
       }
 
       #controls {
-        display: inline-block;
-        float: right;
-        vertical-align: top;
-        margin-top: 15px;
-        margin-right: 20px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
       }
 
-      #output {
-        border-left: 0px none;
-        border-right: 0px none;
-        border-bottom: 0px none;
-        padding-left: 0;
-        padding-right: 0;
+      div.emscripten_border:hover #controls {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      #controls.hidden {
+        display: none !important;
+      }
+
+      div.emscripten_border:fullscreen,
+      div.emscripten_border:-webkit-full-screen {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: black;
+      }
+
+      div.emscripten_border:fullscreen canvas.emscripten,
+      div.emscripten_border:-webkit-full-screen canvas.emscripten {
         width: 100%;
-        height: 140px;
-        margin: 0 auto;
-        margin-top: 10px;
-        display: block;
-        background-color: black;
-        color: rgb(37, 174, 38);
-        font-family: 'Lucida Console', Monaco, monospace;
-        outline: none;
+        height: 100%;
+        object-fit: contain;
       }
 
-      input[type=button] {
-        background-color: lightgray;
-        border: 4px solid darkgray;
+      /* Estilos para los botones de control */
+      .btn-icon {
+        background-color: rgba(200, 200, 200, 0.7);
+        border: 2px solid rgba(100, 100, 100, 0.7);
         color: black;
         text-decoration: none;
         cursor: pointer;
-        width: 140px;
-        height: 50px;
-        margin-left: 10px;
+        width: 40px;
+        height: 40px;
+        margin-left: 5px;
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: top;
+        padding: 0;
+        border-radius: 6px;
       }
 
-      input[type=button]:hover {
-        background-color: #f5f5f5ff;
+      .btn-icon:hover {
+        background-color: rgba(245, 245, 245, 0.9);
         border-color: black;
+      }
+
+      .btn-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+
+      /* Oculta un icono cuando no esté activo */
+      .btn-icon .icon-off {
+        display: none;
+      }
+
+      /* Alterna visibilidad según el estado de silenciado */
+      .btn-icon.muted .icon-on {
+        display: none;
+      }
+
+      .btn-icon.muted .icon-off {
+        display: inline-block;
       }
     </style>
   </head>
   <body>
-    <div id="header">
-        <div class="spinner" id='spinner'></div>
-        <div class="emscripten" id="status">Downloading...</div>
-
-        <span id='controls'>
-          <span><input type="button" value="FULLSCREEN" onclick="Module.canvas.requestFullscreen()"></span>
-          <span><input type="button" id="btn-audio" value="MUTE" onclick="toggleAudio()"></span>
-        </span>
-
-        <div class="emscripten">
-          <progress value="0" max="100" id="progress" hidden=1></progress>
-        </div>
-    </div>
 
     <div class="emscripten_border">
-      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+      <canvas
+        class="emscripten"
+        id="canvas"
+        oncontextmenu="event.preventDefault()"
+        tabindex="-1"
+      ></canvas>
+
+      <!-- Loading overlay - centered on canvas -->
+      <div id="loading-overlay">
+        <div class="spinner" id="spinner"></div>
+        <div id="status">Downloading...</div>
+        <progress value="0" max="100" id="progress" hidden="1"></progress>
+      </div>
+
+      <!-- Controls overlay - top right, visible on hover -->
+      <span id="controls">
+        <span>
+          <button
+            type="button"
+            class="btn-icon"
+            onclick="document.querySelector('.emscripten_border').requestFullscreen()"
+            title="Full Screen"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M264 96L120 96C106.7 96 96 106.7 96 120L96 264C96 273.7 101.8 282.5 110.8 286.2C119.8 289.9 130.1 287.8 137 281L177 241L256 320L177 399L137 359C130.1 352.1 119.8 350.1 110.8 353.8C101.8 357.5 96 366.3 96 376L96 520C96 533.3 106.7 544 120 544L264 544C273.7 544 282.5 538.2 286.2 529.2C289.9 520.2 287.9 509.9 281 503L241 463L320 384L399 463L359 503C352.1 509.9 350.1 520.2 353.8 529.2C357.5 538.2 366.3 544 376 544L520 544C533.3 544 544 533.3 544 520L544 376C544 366.3 538.2 357.5 529.2 353.8C520.2 350.1 509.9 352.1 503 359L463 399L384 320L463 241L503 281C509.9 287.9 520.2 289.9 529.2 286.2C538.2 282.5 544 273.7 544 264L544 120C544 106.7 533.3 96 520 96L376 96C366.3 96 357.5 101.8 353.8 110.8C350.1 119.8 352.2 130.1 359 137L399 177L320 256L241 177L281 137C287.9 130.1 289.9 119.8 286.2 110.8C282.5 101.8 273.7 96 264 96z"/></svg>
+          </button>
+        </span>
+        <span>
+          <button
+            type="button"
+            id="btn-audio"
+            class="btn-icon"
+            onclick="toggleAudio()"
+            title="Toggle Audio"
+          >
+            <!-- Icono de Sonido Activo -->
+            <svg
+              class="icon-on"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 640 640"
+            >
+              <path
+                d="M112 416L160 416L294.1 535.2C300.5 540.9 308.7 544 317.2 544C336.4 544 352 528.4 352 509.2L352 130.8C352 111.6 336.4 96 317.2 96C308.7 96 300.5 99.1 294.1 104.8L160 224L112 224C85.5 224 64 245.5 64 272L64 368C64 394.5 85.5 416 112 416zM505.1 171C494.8 162.6 479.7 164.2 471.3 174.5C462.9 184.8 464.5 199.9 474.8 208.3C507.3 234.7 528 274.9 528 320C528 365.1 507.3 405.3 474.8 431.8C464.5 440.2 463 455.3 471.3 465.6C479.6 475.9 494.8 477.4 505.1 469.1C548.3 433.9 576 380.2 576 320.1C576 260 548.3 206.3 505.1 171.1zM444.6 245.5C434.3 237.1 419.2 238.7 410.8 249C402.4 259.3 404 274.4 414.3 282.8C425.1 291.6 432 305 432 320C432 335 425.1 348.4 414.3 357.3C404 365.7 402.5 380.8 410.8 391.1C419.1 401.4 434.3 402.9 444.6 394.6C466.1 376.9 480 350.1 480 320C480 289.9 466.1 263.1 444.5 245.5z"
+              />
+            </svg>
+            <!-- Icono de Mute / Silenciado -->
+            <svg
+              class="icon-off"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 640 640"
+            >
+              <path
+                d="M80 416L128 416L262.1 535.2C268.5 540.9 276.7 544 285.2 544C304.4 544 320 528.4 320 509.2L320 130.8C320 111.6 304.4 96 285.2 96C276.7 96 268.5 99.1 262.1 104.8L128 224L80 224C53.5 224 32 245.5 32 272L32 368C32 394.5 53.5 416 80 416zM399 239C389.6 248.4 389.6 263.6 399 272.9L446 319.9L399 366.9C389.6 376.3 389.6 391.5 399 400.8C408.4 410.1 423.6 410.2 432.9 400.8L479.9 353.8L526.9 400.8C536.3 410.2 551.5 410.2 560.8 400.8C570.1 391.4 570.2 376.2 560.8 366.9L513.8 319.9L560.8 272.9C570.2 263.5 570.2 248.3 560.8 239C551.4 229.7 536.2 229.6 526.9 239L479.9 286L432.9 239C423.5 229.6 408.3 229.6 399 239z"
+              />
+            </svg>
+          </button>
+        </span>
+      </span>
     </div>
 
-    <textarea id="output" rows="8"></textarea>
+    <script type="text/javascript">
+      var statusElement = document.querySelector("#status");
+      var progressElement = document.querySelector("#progress");
+      var spinnerElement = document.querySelector("#spinner");
+      var Module = {
+        preRun: [],
+        postRun: [],
+        print: (function () {
+          return function (text) {
+            if (arguments.length > 1)
+              text = Array.prototype.slice.call(arguments).join(" ");
+            console.log(text);
+          };
+        })(),
+        printErr: function (text) {
+          if (arguments.length > 1)
+            text = Array.prototype.slice.call(arguments).join(" ");
+          console.error(text);
+        },
+        canvas: (function () {
+          var canvas = document.querySelector("#canvas");
 
-    <script type='text/javascript'>
-        var statusElement = document.querySelector('#status');
-        var progressElement = document.querySelector('#progress');
-        var spinnerElement = document.querySelector('#spinner');
-        var Module = {
-            preRun: [],
-            postRun: [],
-            print: (function() {
-                var element = document.querySelector('#output');
-
-                if (element) element.value = '';    // Clear browser cache
-
-                return function(text) {
-                    if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-                    console.log(text);
-
-                    if (element) {
-                        element.value += text + "\n";
-                        element.scrollTop = element.scrollHeight; // focus on bottom
-                    }
-                };
-            })(),
-            printErr: function(text) {
-                if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-                console.error(text);
+          canvas.addEventListener(
+            "webglcontextlost",
+            function (e) {
+              alert("WebGL context lost. You will need to reload the page.");
+              e.preventDefault();
             },
-            canvas: (function() {
-                var canvas = document.querySelector('#canvas');
+            false,
+          );
 
-                // As a default initial behavior, pop up an alert when webgl context is lost.
-                canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          return canvas;
+        })(),
+        setStatus: function (text) {
+          if (!Module.setStatus.last)
+            Module.setStatus.last = { time: Date.now(), text: "" };
+          if (text === Module.setStatus.last.text) return;
 
-                return canvas;
-            })(),
-            setStatus: function(text) {
-                if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
-                if (text === Module.setStatus.last.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
 
-                var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
-                var now = Date.now();
+          if (m && now - Module.setStatus.last.time < 30) return;
 
-                if (m && now - Module.setStatus.last.time < 30) return; // If this is a progress update, skip it if too soon
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
 
-                Module.setStatus.last.time = now;
-                Module.setStatus.last.text = text;
-
-                if (m) {
-                    text = m[1];
-                    progressElement.value = parseInt(m[2])*100;
-                    progressElement.max = parseInt(m[4])*100;
-                    progressElement.hidden = true;
-                    spinnerElement.hidden = false;
-                } else {
-                    progressElement.value = null;
-                    progressElement.max = null;
-                    progressElement.hidden = true;
-                    if (!text) spinnerElement.style.display = 'none';
-                }
-
-                statusElement.innerHTML = text;
-            },
-            totalDependencies: 0,
-            monitorRunDependencies: function(left) {
-                this.totalDependencies = Math.max(this.totalDependencies, left);
-                Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2]) * 100;
+            progressElement.max = parseInt(m[4]) * 100;
+            progressElement.hidden = true;
+            spinnerElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+            if (!text) {
+              spinnerElement.style.display = "none";
+              // Hide the loading overlay
+              var overlay = document.getElementById('loading-overlay');
+              if (overlay) overlay.classList.add('hidden');
             }
-        };
+          }
 
-        Module.setStatus('Downloading...');
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function (left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(
+            left
+              ? "Preparing... (" +
+                  (this.totalDependencies - left) +
+                  "/" +
+                  this.totalDependencies +
+                  ")"
+              : "All downloads complete.",
+          );
+        },
+      };
 
-        window.onerror = function() {
-            Module.setStatus('Exception thrown, see JavaScript console');
-            spinnerElement.style.display = 'none';
-            Module.setStatus = function(text) { if (text) Module.printErr('[post-exception status] ' + text); };
+      Module.setStatus("Downloading...");
+
+      window.onerror = function () {
+        Module.setStatus("Exception thrown, see JavaScript console");
+        spinnerElement.style.display = "none";
+        Module.setStatus = function (text) {
+          if (text) Module.printErr("[post-exception status] " + text);
         };
+      };
     </script>
 
     <!-- Audio context management for web audio autoplay policy -->
-    <script type='text/javascript'>
-        var audioBtn = document.querySelector('#btn-audio');
+    <script type="text/javascript">
+      var audioBtn = document.querySelector("#btn-audio");
+      const audioContexList = [];
 
-        // An array of all contexts to resume on the page
-        const audioContexList = [];
-        (function() {
-            // A proxy object to intercept AudioContexts and
-            // add them to the array for tracking and resuming later
-            self.AudioContext = new Proxy(self.AudioContext, {
-                construct(target, args) {
-                    const result = new target(...args);
-                    audioContexList.push(result);
-                    if (result.state == "suspended") audioBtn.value = "RESUME";
-                    return result;
-                }
-            });
-        })();
+      (function () {
+        self.AudioContext = new Proxy(self.AudioContext, {
+          construct(target, args) {
+            const result = new target(...args);
+            audioContexList.push(result);
 
-        function toggleAudio() {
-            var resumed = false;
-            audioContexList.forEach(ctx => {
-                if (ctx.state == "suspended") { ctx.resume(); resumed = true; }
-                else if (ctx.state == "running") ctx.suspend();
-            });
+            // Si el contexto creado inicia suspendido, nos aseguramos de reflejarlo en el botón
+            if (result.state === "suspended") {
+              audioBtn.classList.add("muted");
+            }
+            return result;
+          },
+        });
+      })();
 
-            if (resumed) audioBtn.value = "MUTE";
-            else audioBtn.value = "RESUME";
+      function toggleAudio() {
+        // 1. Forzamos el redibujado/cambio visual en el DOM inmediatamente
+        var isMuted = audioBtn.classList.toggle("muted");
+
+        // 2. Aplicamos el cambio de estado a todos los contextos de audio activos
+        audioContexList.forEach((ctx) => {
+          if (isMuted) {
+            if (ctx.state === "running") ctx.suspend();
+          } else {
+            if (ctx.state === "suspended") ctx.resume();
+          }
+        });
+      }
+    </script>
+    <!-- Fullscreen change detection -->
+    <script type="text/javascript">
+      document.addEventListener('fullscreenchange', handleFullscreenChange);
+      document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+      function handleFullscreenChange() {
+        var controls = document.getElementById('controls');
+        var isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
+
+        if (isFullscreen) {
+          controls.classList.add('hidden');
+        } else {
+          controls.classList.remove('hidden');
         }
+      }
     </script>
     {{{ SCRIPT }}}
   </body>
