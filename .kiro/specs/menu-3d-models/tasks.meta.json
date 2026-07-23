@@ -1,5 +1,10 @@
 {
-  "pbtResults": {},
+  "pbtResults": {
+    "1.2 Write property test: Camera3D struct validity after init": {
+      "status": "passed",
+      "lastRunTimestamp": 1784841544086
+    }
+  },
   "executionHistory": {
     "1.1 Implement GameCamera in `game/camera.hpp` and `game/camera.cpp`": [
       {
@@ -23,6 +28,18 @@
         "executionId": "e7d2b13b-0012-4029-84f5-a513b8298206",
         "chatSessionId": "sess_d36d5324-26c9-4bc2-bbd8-e4734a1bc82d",
         "timestamp": 1784839634579
+      }
+    ],
+    "1.2 Write property test: Camera3D struct validity after init": [
+      {
+        "executionId": "f254b0ef-1393-41f2-a816-f3c87a0db3a4",
+        "chatSessionId": "sess_c3dacd4d-1a64-4556-8a2b-00c8ebefe6a1",
+        "timestamp": 1784841102606
+      },
+      {
+        "executionId": "f254b0ef-1393-41f2-a816-f3c87a0db3a4",
+        "chatSessionId": "sess_c3dacd4d-1a64-4556-8a2b-00c8ebefe6a1",
+        "timestamp": 1784841680541
       }
     ]
   }

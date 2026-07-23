@@ -21,3 +21,10 @@ endif()
 
 add_subdirectory(lib/raylib)
 add_subdirectory(src)
+
+# Tests (property-based, headless — no GPU required)
+option(BUILD_TESTS "Build property-based tests" ON)
+if(BUILD_TESTS AND NOT EMSCRIPTEN)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
