@@ -33,3 +33,55 @@ target_include_directories(test_camera_property2 PRIVATE
 target_compile_features(test_camera_property2 PRIVATE cxx_std_17)
 
 add_test(NAME camera_property2_orbit_position_invariant COMMAND test_camera_property2)
+
+# Property Test 3: Parameter clamping
+add_executable(test_camera_property3
+    game/test_camera_property3.cpp
+    ${CAMERA_SRC}
+)
+target_include_directories(test_camera_property3 PRIVATE
+    ${RAYLIB_STUB_DIR}    # stub raylib.h (must come FIRST to override real raylib)
+    ${CAMERA_INCLUDE}     # camera.hpp
+)
+target_compile_features(test_camera_property3 PRIVATE cxx_std_17)
+
+add_test(NAME camera_property3_parameter_clamping COMMAND test_camera_property3)
+
+# Property Test 4: Update additivity (framerate independence)
+add_executable(test_camera_property4
+    game/test_camera_property4.cpp
+    ${CAMERA_SRC}
+)
+target_include_directories(test_camera_property4 PRIVATE
+    ${RAYLIB_STUB_DIR}
+    ${CAMERA_INCLUDE}
+)
+target_compile_features(test_camera_property4 PRIVATE cxx_std_17)
+
+add_test(NAME camera_property4_update_additivity COMMAND test_camera_property4)
+
+# Property Test 5: Angle wrapping invariant
+add_executable(test_camera_property5
+    game/test_camera_property5.cpp
+    ${CAMERA_SRC}
+)
+target_include_directories(test_camera_property5 PRIVATE
+    ${RAYLIB_STUB_DIR}
+    ${CAMERA_INCLUDE}
+)
+target_compile_features(test_camera_property5 PRIVATE cxx_std_17)
+
+add_test(NAME camera_property5_angle_wrapping COMMAND test_camera_property5)
+
+# Property Test 6: Delta-time clamping
+add_executable(test_camera_property6
+    game/test_camera_property6.cpp
+    ${CAMERA_SRC}
+)
+target_include_directories(test_camera_property6 PRIVATE
+    ${RAYLIB_STUB_DIR}
+    ${CAMERA_INCLUDE}
+)
+target_compile_features(test_camera_property6 PRIVATE cxx_std_17)
+
+add_test(NAME camera_property6_dt_clamping COMMAND test_camera_property6)

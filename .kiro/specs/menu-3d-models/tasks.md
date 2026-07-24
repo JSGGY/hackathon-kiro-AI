@@ -29,24 +29,24 @@ This plan implements the 3D background scene for the ChronoClash main menu by bu
     - After each update, assert sqrt((cam.x-target.x)² + (cam.z-target.z)²) == distance ±0.01 AND cam.y == target.y + height AND Camera3D.target == configured target
     - **Validates: Requirements 2.1, 2.2, 2.3, 2.6**
 
-  - [ ]* 1.4 Write property test: Parameter clamping
+  - [x] 1.4 Write property test: Parameter clamping
     - **Property 3: Parameter clamping**
     - Generate random out-of-range parameters and verify internal state matches clamped equivalents
     - **Validates: Requirements 1.5**
 
-  - [ ]* 1.5 Write property test: Update additivity (framerate independence)
+  - [x] 1.5 Write property test: Update additivity (framerate independence)
     - **Property 4: Update additivity**
     - Generate random positive dt values each ≤ 0.1 where sum ≤ 0.1
     - Assert calling update(dt1) then update(dt2) produces same state as update(dt1+dt2)
     - **Validates: Requirements 3.2**
 
-  - [ ]* 1.6 Write property test: Angle wrapping invariant
+  - [x] 1.6 Write property test: Angle wrapping invariant
     - **Property 5: Angle wrapping invariant**
     - Generate random sequence of updates that cause cumulative angle > 2π
     - Assert getAngle() is always in [0, 2π)
     - **Validates: Requirements 2.5**
 
-  - [ ]* 1.7 Write property test: Delta-time clamping
+  - [x] 1.7 Write property test: Delta-time clamping
     - **Property 6: Delta-time clamping**
     - Generate random dt values > 0.1
     - Assert update(large_dt) produces same state as update(0.1)

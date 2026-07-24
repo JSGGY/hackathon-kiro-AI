@@ -7,6 +7,22 @@
     "1.3 Write property test: Orbit position invariant": {
       "status": "passed",
       "lastRunTimestamp": 1784842045277
+    },
+    "1.4 Write property test: Parameter clamping": {
+      "status": "passed",
+      "lastRunTimestamp": 1784842486298
+    },
+    "1.5 Write property test: Update additivity (framerate independence)": {
+      "status": "passed",
+      "lastRunTimestamp": 1784849614867
+    },
+    "1.6 Write property test: Angle wrapping invariant": {
+      "status": "passed",
+      "lastRunTimestamp": 1784849893709
+    },
+    "1.7 Write property test: Delta-time clamping": {
+      "status": "passed",
+      "lastRunTimestamp": 1784850067700
     }
   },
   "executionHistory": {
@@ -56,6 +72,54 @@
         "executionId": "10086b49-aecb-4296-9a1b-70b502826d53",
         "chatSessionId": "sess_8b67ba77-a7e4-4f5d-9a1f-11c9d89e898c",
         "timestamp": 1784842057606
+      }
+    ],
+    "1.4 Write property test: Parameter clamping": [
+      {
+        "executionId": "bde883d0-2bf9-4353-b4c6-3bac590c68e9",
+        "chatSessionId": "sess_2e115a9d-88a4-4aad-b1d6-53142fe7c030",
+        "timestamp": 1784842292988
+      },
+      {
+        "executionId": "bde883d0-2bf9-4353-b4c6-3bac590c68e9",
+        "chatSessionId": "sess_2e115a9d-88a4-4aad-b1d6-53142fe7c030",
+        "timestamp": 1784842497726
+      }
+    ],
+    "1.5 Write property test: Update additivity (framerate independence)": [
+      {
+        "executionId": "adf547dd-690f-446d-8de2-a9b636e59ac6",
+        "chatSessionId": "sess_18e31d91-eb0b-461d-b758-7c642cd4c471",
+        "timestamp": 1784849310612
+      },
+      {
+        "executionId": "adf547dd-690f-446d-8de2-a9b636e59ac6",
+        "chatSessionId": "sess_18e31d91-eb0b-461d-b758-7c642cd4c471",
+        "timestamp": 1784849641824
+      }
+    ],
+    "1.6 Write property test: Angle wrapping invariant": [
+      {
+        "executionId": "f74cc3ce-b73f-4ea8-bccb-a4f3fe3e5a94",
+        "chatSessionId": "sess_51c9bd89-da30-475f-9ce5-86ad10a5ef61",
+        "timestamp": 1784849651705
+      },
+      {
+        "executionId": "f74cc3ce-b73f-4ea8-bccb-a4f3fe3e5a94",
+        "chatSessionId": "sess_51c9bd89-da30-475f-9ce5-86ad10a5ef61",
+        "timestamp": 1784849907455
+      }
+    ],
+    "1.7 Write property test: Delta-time clamping": [
+      {
+        "executionId": "ba3752bf-6fd1-4253-9936-49d065a4e589",
+        "chatSessionId": "sess_6fba09d5-db57-43a1-94ed-ce0c8b289a20",
+        "timestamp": 1784849915806
+      },
+      {
+        "executionId": "ba3752bf-6fd1-4253-9936-49d065a4e589",
+        "chatSessionId": "sess_6fba09d5-db57-43a1-94ed-ce0c8b289a20",
+        "timestamp": 1784850080167
       }
     ]
   }
